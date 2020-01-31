@@ -1,5 +1,10 @@
 import java.lang.Math;
 
+/**
+creates the game board
+@author Jack Basinet
+@version 1.30.20
+*/
 public class GameBoard
 {
   public static final int EASY = 0;
