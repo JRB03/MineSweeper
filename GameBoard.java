@@ -19,17 +19,12 @@ public class GameBoard
   private int[] size = {9, 16, 22};
 
   /**
-  default constructor
-  */
-  public GameBoard() { this.GameBoard(MEDIUM); }
-
-  /**
   sets up the game board
   @param level the difficulty of the level (easy,medium,hard)
   */
   public GameBoard(int level)
   {
-    int size = size[level];
+    int size = this.size[level];
     board = new Square[size][size];
 
     for(int r = 0; r < size; r++)
@@ -46,36 +41,38 @@ public class GameBoard
       }
     }
 
-    for(int bombs = bombs[level]; bombs > 0; bombs--)
+    for(int bombs = this.bombs[level]; bombs > 0; bombs--)
     {
       int row = 0;
       int col = 0;
       while(board[row][col].val != Square.BOMB)
       {
-        row = (int)(Math.random() * size[level]);
-        col = (int)(Math.random() * size[level]);
+        row = (int)(Math.random() * this.size[level]);
+        col = (int)(Math.random() * this.size[level]);
 
         board[row][col].val = Square.BOMB;
       }
     }
 
-    for(Square square: board)
+    for(Square[] row: board)
     {
-      int radar = 0;
-      for(int a = -1; a < 2; a++)
+      for(Square square: row)
       {
-        if(board[square.row-1][square.col + a].val == Square.BOMB) { radar++; }
+        int radar = 0;
+        for(int a = -1; a < 2; a++)
+        {
+          if(board[square.row-1][square.col + a].val == Square.BOMB) { radar++; }
+        }
+        for(int a = -1; a < 2; a++)
+        {
+          if(board[square.row][square.col + a].val == Square.BOMB) { radar++; }
+        }
+        for(int a = -1; a < 2; a++)
+        {
+          if(board[square.row+1][square.col + a].val == Square.BOMB) { radar++; }
+        }
+        square.val = radar;
       }
-      for(int a = -1; a < 2; a++)
-      {
-        if(board[square.row][square.col + a].val == Square.BOMB) { radar++; }
-      }
-      for(int a = -1; a < 2; a++)
-      {
-        if(board[square.row+1][square.col + a].val == Square.BOMB) { radar++; }
-      }
-      square.val = radar;
-
     }
   }
 
@@ -83,13 +80,16 @@ public class GameBoard
   checks to see if all non bombs have been shown
   @return boolean if player has won
   */
-  public boolean isWin();
+  public boolean isWin()
   {
-    for(Square square: board)
+    for(Square[] row: board)
     {
-      if((square.val != Square.BOMB) && !(square.show))
+      for(Square square: row)
       {
-        return false;
+        if((square.val != Square.BOMB) && !(square.show))
+        {
+          return false;
+        }
       }
     }
     return true;
@@ -105,5 +105,25 @@ public class GameBoard
   {
     board[r][c].show = true;
     return board[r][c].val;
+  }
+
+  /**
+  holds the information for individual squares
+  @author Jack Basinet
+  @version 1.30.20
+  */
+  private class Square
+  {
+    public static final int BOMB = -1;
+
+    /** the row and column of the square */
+    int row;
+    int col;
+
+    /** the number of bombs around the square (-1 if bomb) */
+    int val;
+
+    /** whether or not the square is showing */
+    boolean show;
   }
 }
