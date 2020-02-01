@@ -10,8 +10,8 @@ Runs Minesweeper
 */
 public class RunGame
 {
-  public static final int SQUARE_SIZE = 20;
-  
+  public static final int SQUARE_SIZE = 25;
+
   public static void main(String[] args)
   {
     boolean input = false;

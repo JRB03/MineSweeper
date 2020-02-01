@@ -22,10 +22,6 @@ public class GameBoard
   /** the game board */
   private Square[][] board;
 
-  /** img vars for squares */
-  private String imgFileName;
-  private BufferedImage image;
-
   /**
   sets up the game board
   @param level the difficulty of the level (easy,medium,hard)
@@ -44,12 +40,13 @@ public class GameBoard
         temp.col = c;
         temp.val = 0;
         temp.show = false;
+        temp.flag = false;
 
         board[r][c] = temp;
       }
     }
 
-    for(int bombs = BOMBS[level]; bombs > 0; bombs--)
+    for(int b = BOMBS[level]; b > 0; b--)
     {
       int row = 0;
       int col = 0;
@@ -79,37 +76,25 @@ public class GameBoard
         {
           if((square.row+1 < size && square.col + a >=0 && square.col + a < size) && board[square.row+1][square.col + a].val == Square.BOMB) { radar++; }
         }
-        square.val = radar;
+        if(square.val != Square.BOMB) { square.val = radar; }
       }
     }
   }
 
   /**
-
-  /**
   updates and loads the square art
   */
-  public void loadSquareArt()
+  public void updateArt(Graphics g)
    {
      for(Square[] row: board)
      {
        for(Square square: row)
        {
-         if(!square.show) { imgFileName = "Art/red.jpg"; }
-         else { imgFileName = "Art/" + square.val + ".png"; }
-
-         BufferedImage squareImg = null;
-         try
-         {
-            squareImg = ImageIO.read(new File(imgFileName));
-         } catch (IOException e) {}
-
-         image = new BufferedImage(RunGame.SQUARE_SIZE, RunGame.SQUARE_SIZE, BufferedImage.TYPE_INT_ARGB);
-
-         Graphics2D imgG = image.createGraphics();
-         imgG.drawImage(squareImg, null, square.row * RunGame.SQUARE_SIZE, square.col * RunGame.SQUARE_SIZE);
+         BufferedImage img = square.getImage();
+         g.drawImage(img, square.row * RunGame.SQUARE_SIZE, square.col * RunGame.SQUARE_SIZE, null);
        }
      }
+
    }
 
   /**
@@ -132,15 +117,39 @@ public class GameBoard
   }
 
   /**
+  flips all squares (end of game)
+  @return boolean if player has won
+  */
+  public void gameOver()
+  {
+    for(Square[] row: board)
+    {
+      for(Square square: row)
+      {
+        if(!(square.val == Square.BOMB) && (square.flag))
+        {
+          square.val = -2;
+        }
+        square.show = true;
+      }
+    }
+  }
+
+  /**
   shows a square
   @param r the row of the square
   @param c the column of the square
   @return int the value of the square
   */
-  public int flip(int r, int c)
+  public boolean flip(int r, int c)
   {
     board[r][c].show = true;
-    return board[r][c].val;
+    if(board[r][c].val == -1)
+    {
+      this.gameOver();
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -151,7 +160,7 @@ public class GameBoard
   */
   public void flag(int r, int c)
   {
-    board[r][c].val = 9;
+    board[r][c].flag = true;
   }
 
   /**
@@ -172,5 +181,32 @@ public class GameBoard
 
     /** whether or not the square is showing */
     boolean show;
+
+    /** whether or not the square is flagged */
+    boolean flag;
+
+    /** img vars for squares */
+    private String imgFileName;
+    private BufferedImage image;
+
+    public BufferedImage getImage()
+    {
+      if(flag) { imgFileName = "Art/flag.png"; }
+      else if(!show) { imgFileName = "Art/hide.png"; }
+      else { imgFileName = "Art/" + val + ".png"; }
+
+      BufferedImage squareImg = null;
+      try
+      {
+         squareImg = ImageIO.read(new File(imgFileName));
+      } catch (IOException e) {}
+
+      image = new BufferedImage(RunGame.SQUARE_SIZE, RunGame.SQUARE_SIZE, BufferedImage.TYPE_INT_ARGB);
+
+      Graphics2D imgG = image.createGraphics();
+      imgG.drawImage(squareImg, 0, 0, null);
+
+      return image;
+    }
   }
 }
