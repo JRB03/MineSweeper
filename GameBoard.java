@@ -14,10 +14,11 @@ public class GameBoard
   public static final int EASY = 0;
   public static final int MEDIUM = 1;
   public static final int HARD = 2;
+  public static final int EXTREME = 3;
 
   /** bombs and sizes of board at each difficulty */
-  public static final int[] BOMBS = {13, 44, 105};
-  public static final int[] SIZE = {9, 18, 25};
+  public static final int[] BOMBS = {13, 44, 105, 248};
+  public static final int[] SIZE = {9, 18, 25, 34};
 
   /** the game board */
   private Square[][] board;
