@@ -1,4 +1,8 @@
 import java.lang.Math;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import javax.imageio.*;
 
 /**
 creates the game board
@@ -17,6 +21,10 @@ public class GameBoard
 
   /** the game board */
   private Square[][] board;
+
+  /** img vars for squares */
+  private String imgFileName;
+  private BufferedImage image;
 
   /**
   sets up the game board
@@ -77,6 +85,34 @@ public class GameBoard
   }
 
   /**
+
+  /**
+  updates and loads the square art
+  */
+  public void loadSquareArt()
+   {
+     for(Square[] row: board)
+     {
+       for(Square square: row)
+       {
+         if(!square.show) { imgFileName = "Art/red.jpg"; }
+         else { imgFileName = "Art/" + square.val + ".png"; }
+
+         BufferedImage squareImg = null;
+         try
+         {
+            squareImg = ImageIO.read(new File(imgFileName));
+         } catch (IOException e) {}
+
+         image = new BufferedImage(RunGame.SQUARE_SIZE, RunGame.SQUARE_SIZE, BufferedImage.TYPE_INT_ARGB);
+
+         Graphics2D imgG = image.createGraphics();
+         imgG.drawImage(squareImg, null, square.row * RunGame.SQUARE_SIZE, square.col * RunGame.SQUARE_SIZE);
+       }
+     }
+   }
+
+  /**
   checks to see if all non bombs have been shown
   @return boolean if player has won
   */
@@ -105,6 +141,17 @@ public class GameBoard
   {
     board[r][c].show = true;
     return board[r][c].val;
+  }
+
+  /**
+  shows a square
+  @param r the row of the square
+  @param c the column of the square
+  @return int the value of the square
+  */
+  public void flag(int r, int c)
+  {
+    board[r][c].val = 9;
   }
 
   /**
