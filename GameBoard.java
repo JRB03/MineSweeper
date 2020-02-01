@@ -16,7 +16,7 @@ public class GameBoard
   public static final int HARD = 2;
 
   /** bombs and sizes of board at each difficulty */
-  public static final int[] BOMBS = {10, 40, 99};
+  public static final int[] BOMBS = {13, 44, 105};
   public static final int[] SIZE = {9, 18, 25};
 
   /** the game board */
@@ -31,32 +31,21 @@ public class GameBoard
     int size = SIZE[level];
     board = new Square[size][size];
 
-    for(int r = 0; r < size; r++)
+    for(int r = 0; r < board.length; r++)
     {
-      for(int c = 0; c < size; c++)
+      for(int c = 0; c < board[0].length; c++)
       {
-        Square temp = new Square();
-        temp.row = r;
-        temp.col = c;
-        temp.val = 0;
-        temp.show = false;
-        temp.flag = false;
-
-        board[r][c] = temp;
+        board[r][c] = new Square(r, c, 0);
       }
     }
 
     for(int b = BOMBS[level]; b > 0; b--)
     {
-      int row = 0;
-      int col = 0;
-      while(board[row][col].val != Square.BOMB)
-      {
-        row = (int)(Math.random() * SIZE[level]);
-        col = (int)(Math.random() * SIZE[level]);
+      int row = (int)(Math.random() * size);
+      int col = (int)(Math.random() * size);
 
-        board[row][col].val = Square.BOMB;
-      }
+      if (board[row][col].val != Square.BOMB) { board[row][col].val = Square.BOMB; }
+      else { b++; }
     }
 
     for(Square[] row: board)
@@ -130,6 +119,7 @@ public class GameBoard
         {
           square.val = -2;
         }
+        square.flag = false;
         square.show = true;
       }
     }
@@ -139,12 +129,33 @@ public class GameBoard
   shows a square
   @param r the row of the square
   @param c the column of the square
-  @return int the value of the square
+  @return boolean if bomb flipped
   */
   public boolean flip(int r, int c)
   {
-    board[r][c].show = true;
-    if(board[r][c].val == -1)
+    Square square = board[r][c];
+    if(square.show == true || square.flag) { return false; }
+
+    square.show = true;
+    if(square.val == 0)
+    {
+      int size = board.length;
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < size)) { flip(square.row-1, square.col + a); }
+      }
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.col + a >=0 && square.col + a < size))
+        { flip(square.row, square.col + a); }
+      }
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.row+1 < size && square.col + a >=0 && square.col + a < size)) { flip(square.row+1, square.col + a); }
+      }
+      for(int a = -1; a < 2; a++) {  }
+    }
+    else if(square.val == -1)
     {
       this.gameOver();
       return true;
@@ -160,7 +171,10 @@ public class GameBoard
   */
   public void flag(int r, int c)
   {
-    board[r][c].flag = true;
+    if(!board[r][c].show)
+    {
+      board[r][c].flag = !board[r][c].flag;
+    }
   }
 
   /**
@@ -188,6 +202,15 @@ public class GameBoard
     /** img vars for squares */
     private String imgFileName;
     private BufferedImage image;
+
+    public Square(int row, int col, int val)
+    {
+      this.row = row;
+      this.col = col;
+      this.val = val;
+      this.show = false;
+      this.flag = false;
+    }
 
     public BufferedImage getImage()
     {

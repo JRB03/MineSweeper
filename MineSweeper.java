@@ -22,15 +22,15 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
   constructor
   @param difficulty the difficulty of the level
   */
-  public MineSweeper(int difficulty)
+  public MineSweeper(int difficulty, JFrame window)
   {
     difty = difficulty;
     over = false;
     flag = false;
     gameboard = new GameBoard(difty);
 
-    addMouseListener(this);
-    addKeyListener(this);
+    this.addMouseListener(this);
+    window.addKeyListener(this);
   }
 
   public void restart()
@@ -73,6 +73,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
      if(keyCode == KeyEvent.VK_SPACE)
      {
        flag = true;
+
      }
   }
   public void keyReleased(KeyEvent e)

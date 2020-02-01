@@ -31,11 +31,11 @@ public class RunGame
     }
     JFrame frame = new JFrame();
 
-    frame.setSize(size, size);
+    frame.setSize(size, size + 22);
     frame.setTitle("Mine Sweeper");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    MineSweeper game = new MineSweeper(level);
+    MineSweeper game = new MineSweeper(level, frame);
     frame.add(game);
 
     frame.setVisible(true);
