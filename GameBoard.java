@@ -23,12 +23,16 @@ public class GameBoard
   /** the game board */
   private Square[][] board;
 
+  private int flags;
+
   /**
   sets up the game board
   @param level the difficulty of the level (easy,medium,hard)
   */
   public GameBoard(int level)
   {
+    flags = BOMBS[level];
+
     int size = SIZE[level];
     board = new Square[size][size];
 
@@ -40,7 +44,7 @@ public class GameBoard
       }
     }
 
-    for(int b = BOMBS[level]; b > 0; b--)
+    for(int b = flags; b > 0; b--)
     {
       int row = (int)(Math.random() * size);
       int col = (int)(Math.random() * size);
@@ -168,14 +172,25 @@ public class GameBoard
   shows a square
   @param r the row of the square
   @param c the column of the square
-  @return int the value of the square
+  @return int the number of flags left
   */
-  public void flag(int r, int c)
+  public int flag(int r, int c)
   {
-    if(!board[r][c].show)
+    if(r == -1 && c == -1) {}
+    else if(!board[r][c].show)
     {
-      board[r][c].flag = !board[r][c].flag;
+      if(board[r][c].flag)
+      {
+        board[r][c].flag = false;
+        flags++;
+      }
+      else
+      {
+        board[r][c].flag = true;
+        flags--;
+      }
     }
+    return flags;
   }
 
   /**

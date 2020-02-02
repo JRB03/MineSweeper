@@ -39,15 +39,23 @@ public class RunGame
       else { System.out.println("invalid input..."); }
     }
     JFrame frame = new JFrame();
+    JFrame score = new JFrame();
 
     frame.setSize(size, size + 22);
     frame.setTitle("Mine Sweeper");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+    score.setSize(180, 70);
+    score.setTitle("Stats");
+
     MineSweeper game = new MineSweeper(level, frame);
     frame.add(game);
 
+    ScoreBoard stats = new ScoreBoard(game);
+    score.add(stats);
+
     frame.setVisible(true);
+    score.setVisible(true);
 
   }
 }

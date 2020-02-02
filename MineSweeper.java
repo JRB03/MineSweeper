@@ -14,9 +14,11 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
 
   /** flag mode */
   private boolean flag;
+  int flags;
 
   private int difty;
-  private boolean over;
+  boolean over;
+  boolean win;
 
   /**
   constructor
@@ -28,16 +30,22 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
     over = false;
     flag = false;
     gameboard = new GameBoard(difty);
+    flags = gameboard.flag(-1,-1);
 
     this.addMouseListener(this);
     window.addKeyListener(this);
   }
 
+  /**
+  restarts the game
+  */
   public void restart()
   {
     over = false;
+    win = false;
     flag = false;
     gameboard = new GameBoard(difty);
+    flags = gameboard.flag(-1,-1);
   }
 
   /**
@@ -46,15 +54,16 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
   */
   public void mousePressed(MouseEvent e)
   {
-    if(over) { restart(); }
+    if(over || win) { restart(); }
     else if(flag)
     {
-      gameboard.flag((int)(e.getX() / RunGame.SQUARE_SIZE), (int)(e.getY() / RunGame.SQUARE_SIZE));
+      flags = gameboard.flag((int)(e.getX() / RunGame.SQUARE_SIZE), (int)(e.getY() / RunGame.SQUARE_SIZE));
     }
     else
     {
       over =  gameboard.flip((int)(e.getX() / RunGame.SQUARE_SIZE), (int)(e.getY() / RunGame.SQUARE_SIZE));
     }
+    if(gameboard.isWin() && !over) { win = true; }
     repaint();
   }
   public void mouseReleased(MouseEvent e) {}
