@@ -57,6 +57,10 @@ public class ScoreBoard extends JComponent implements ActionListener
     if(game.win) { g.drawString(WIN, 90, 20); }
   }
 
+  /**
+  runs everytime the timer clicks
+  @param e the action event
+  */
   public void actionPerformed(ActionEvent e)
   {
     if(!game.over && !game.win && restart)

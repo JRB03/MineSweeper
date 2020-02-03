@@ -11,10 +11,12 @@ Runs Minesweeper
 public class RunGame
 {
   public static final int SQUARE_SIZE = 25;
+  public static final int SCORE_X = 180;
+  public static final int SCORE_Y = 70;
 
   public static void main(String[] args)
   {
-    System.out.print("Welcome to MineSweeper! Would you like the rules? (y/n) ");
+    System.out.print("Welcome to MineSweeper!\nWould you like the rules? (y/n) ");
     Scanner yn = new Scanner(System.in);
     String rules = yn.nextLine();
     if(rules.equals("y") || rules.equals("yes") || rules.equals("Y"))
@@ -45,7 +47,7 @@ public class RunGame
     frame.setTitle("Mine Sweeper");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    score.setSize(180, 70);
+    score.setSize(SCORE_X, SCORE_Y);
     score.setTitle("Stats");
 
     MineSweeper game = new MineSweeper(level, frame);

@@ -23,6 +23,7 @@ public class GameBoard
   /** the game board */
   private Square[][] board;
 
+  /** the number of flags able to be used remaining */
   private int flags;
 
   /**
@@ -40,7 +41,7 @@ public class GameBoard
     {
       for(int c = 0; c < board[0].length; c++)
       {
-        board[r][c] = new Square(r, c, 0);
+        board[r][c] = new Square(r, c);
       }
     }
 
@@ -111,8 +112,7 @@ public class GameBoard
   }
 
   /**
-  flips all squares (end of game)
-  @return boolean if player has won
+  flips all squares (end of game) and marks false flags
   */
   public void gameOver()
   {
@@ -219,15 +219,24 @@ public class GameBoard
     private String imgFileName;
     private BufferedImage image;
 
-    public Square(int row, int col, int val)
+    /**
+    constructor
+    @param row the row of the square
+    @param col the column of the square
+    */
+    public Square(int row, int col)
     {
       this.row = row;
       this.col = col;
-      this.val = val;
+      this.val = 0;
       this.show = false;
       this.flag = false;
     }
 
+    /**
+    gets the image for the square depending on value
+    @return BufferedImage the image of the square
+    */
     public BufferedImage getImage()
     {
       if(flag) { imgFileName = "Art/flag.png"; }
