@@ -79,7 +79,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
   {
      int keyCode = e.getKeyCode();
 
-     if(keyCode == KeyEvent.VK_SPACE)
+     if(keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_META)
      {
        flag = true;
 
@@ -89,7 +89,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
   {
     int keyCode = e.getKeyCode();
 
-    if(keyCode == KeyEvent.VK_SPACE)
+    if(keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_META)
     {
       flag = false;
     }
