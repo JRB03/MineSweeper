@@ -15,6 +15,7 @@ public class GameBoard
   public static final int MEDIUM = 1;
   public static final int HARD = 2;
   public static final int EXTREME = 3;
+  public static final int CHOOSE = -1;
 
   /** bombs and sizes of board at each difficulty */
   public static final int[] BOMBS = {13, 44, 105, 248};
@@ -22,21 +23,27 @@ public class GameBoard
 
   /** the game board */
   private Square[][] board;
+  private int length;
+  private int width;
 
   /** the number of flags able to be used remaining */
   private int flags;
+
+  /** if the game is over */
+  private boolean over;
 
   /**
   sets up the game board
   @param level the difficulty of the level (easy,medium,hard)
   */
-  public GameBoard(int level)
+  public GameBoard(int length, int width, int bombs)
   {
-    flags = BOMBS[level];
+    flags = bombs;
+    over = false;
+    this.length = length;
+    this.width = width;
 
-    int size = SIZE[level];
-    board = new Square[size][size];
-
+    board = new Square[length][width];
     for(int r = 0; r < board.length; r++)
     {
       for(int c = 0; c < board[0].length; c++)
@@ -45,15 +52,17 @@ public class GameBoard
       }
     }
 
+    // does bombs
     for(int b = flags; b > 0; b--)
     {
-      int row = (int)(Math.random() * size);
-      int col = (int)(Math.random() * size);
+      int row = (int)(Math.random() * length);
+      int col = (int)(Math.random() * width);
 
       if (board[row][col].val != Square.BOMB) { board[row][col].val = Square.BOMB; }
       else { b++; }
     }
 
+    // does vals
     for(Square[] row: board)
     {
       for(Square square: row)
@@ -61,15 +70,15 @@ public class GameBoard
         int radar = 0;
         for(int a = -1; a < 2; a++)
         {
-          if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < size) && board[square.row-1][square.col + a].val == Square.BOMB) { radar++; }
+          if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width) && board[square.row-1][square.col + a].val == Square.BOMB) { radar++; }
         }
         for(int a = -1; a < 2; a++)
         {
-          if((square.col + a >=0 && square.col + a < size) && board[square.row][square.col + a].val == Square.BOMB) { radar++; }
+          if((square.col + a >=0 && square.col + a < width) && board[square.row][square.col + a].val == Square.BOMB) { radar++; }
         }
         for(int a = -1; a < 2; a++)
         {
-          if((square.row+1 < size && square.col + a >=0 && square.col + a < size) && board[square.row+1][square.col + a].val == Square.BOMB) { radar++; }
+          if((square.row+1 < length && square.col + a >=0 && square.col + a < width) && board[square.row+1][square.col + a].val == Square.BOMB) { radar++; }
         }
         if(square.val != Square.BOMB) { square.val = radar; }
       }
@@ -102,7 +111,7 @@ public class GameBoard
     {
       for(Square square: row)
       {
-        if((square.val != Square.BOMB) && !(square.show))
+        if(square.val == Square.BOMB && !(square.flag))
         {
           return false;
         }
@@ -114,7 +123,7 @@ public class GameBoard
   /**
   flips all squares (end of game) and marks false flags
   */
-  public void gameOver()
+  public void gameOver(boolean win)
   {
     for(Square[] row: board)
     {
@@ -124,7 +133,7 @@ public class GameBoard
         {
           square.val = -2;
         }
-        square.flag = false;
+        if(!win) { square.flag = false; }
         square.show = true;
       }
     }
@@ -136,33 +145,64 @@ public class GameBoard
   @param c the column of the square
   @return boolean if bomb flipped
   */
-  public boolean flip(int r, int c)
+  public boolean flip(int r, int c, boolean recurs)
   {
     Square square = board[r][c];
-    if(square.show == true || square.flag) { return false; }
+    if(square.flag) { return false; }
+    if(square.show && !(recurs)) {
+      int flagged = 0;
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width) && board[square.row-1][square.col + a].flag) { flagged++; }
+      }
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.col + a >= 0 && square.col + a < width) && board[square.row][square.col + a].flag) { flagged++; }
+      }
+      for(int a = -1; a < 2; a++)
+      {
+        if((square.row+1 < length && square.col + a >=0 && square.col + a < width) && board[square.row+1][square.col + a].flag) { flagged++; }
+      }
+      Square temp;
+      if(square.val == flagged) {
+        for(int a = -1; a < 2; a++)
+        {
+          if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width) && !board[square.row-1][square.col + a].flag) {
+            temp = board[square.row-1][square.col + a];
+            boolean m = flip(temp.row, temp.col, true);
+            if(!over) { over = m; } }
+        }
+        for(int a = -1; a < 2; a++)
+        {
+          if((square.col + a >=0 && square.col + a < width) && !board[square.row][square.col + a].flag) {
+            temp = board[square.row][square.col + a];
+            boolean m = flip(temp.row, temp.col, true);
+            if(!over) { over = m; } }
+        }
+        for(int a = -1; a < 2; a++)
+        {
+          if((square.row+1 < length && square.col + a >=0 && square.col + a < width) && !board[square.row+1][square.col + a].flag) {
+            temp = board[square.row+1][square.col + a];
+            boolean m = flip(temp.row, temp.col, true);
+            if(!over) { over = m; } }
+        }
+        return over;
+      }
+    }
+    if(square.show) { return false; }
 
     square.show = true;
-    if(square.val == 0)
-    {
-      int size = board.length;
-      for(int a = -1; a < 2; a++)
-      {
-        if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < size)) { flip(square.row-1, square.col + a); }
-      }
-      for(int a = -1; a < 2; a++)
-      {
-        if((square.col + a >=0 && square.col + a < size))
-        { flip(square.row, square.col + a); }
-      }
-      for(int a = -1; a < 2; a++)
-      {
-        if((square.row+1 < size && square.col + a >=0 && square.col + a < size)) { flip(square.row+1, square.col + a); }
-      }
-      for(int a = -1; a < 2; a++) {  }
-    }
-    else if(square.val == -1)
-    {
-      this.gameOver();
+
+    if(square.val == 0) {
+      for(int a = -1; a < 2; a++) {
+        if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width)) { flip(square.row-1, square.col + a, true); }
+      } for(int a = -1; a < 2; a++) {
+          if((square.col + a >=0 && square.col + a < width)) { flip(square.row, square.col + a, true); }
+      } for(int a = -1; a < 2; a++) {
+          if((square.row+1 < length && square.col + a >=0 && square.col + a < width)) { flip(square.row+1, square.col + a, true); }
+      } for(int a = -1; a < 2; a++) {  }
+    } else if(square.val == -1) {
+      this.gameOver(false);
       return true;
     }
     return false;
@@ -184,7 +224,7 @@ public class GameBoard
         board[r][c].flag = false;
         flags++;
       }
-      else
+      else if(flags > 0)
       {
         board[r][c].flag = true;
         flags--;

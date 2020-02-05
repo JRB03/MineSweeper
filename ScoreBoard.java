@@ -13,18 +13,27 @@ public class ScoreBoard extends JComponent implements ActionListener
   public static final String LOSE = "You Lose :(";
   public static final String WIN = "You Win! :)";
 
+  /** the timer */
   private Timer timer;
+  /** seconds, minutes, and hrs */
   private int sec;
   private int min;
   private int hrs;
+  /** the time projection */
   private String time;
 
+  /** if restarting */
   private boolean restart;
+
+  /** counter so second counts each second and not 20 mileseconds */
   private int wait;
 
+  /** bombs remaining */
   private int bombs_rem;
+  /** the bombs left projection */
   private String remain;
 
+  /** the game itself */
   private MineSweeper game;
 
   /**
