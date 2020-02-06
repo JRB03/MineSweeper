@@ -23,7 +23,7 @@ public class RunGame
       {
          System.out.println("1. Click on a tile to reveal it\n2. Hold spacebar and click on a tile to flag it\n3. Each tiles value is how many bombs are adjacent to it (up to 8)\n4. Click on a shown tile whose flag value has been met to reveal the other tiles around it\n5. Flag all the bombs to win!\n6. Once you win, hold the number level you'd like to play next (none if you want to do the same) and click the screen anywhere to start again");
       }
-   
+
       boolean input = false;
       int length = 0;
       int width = 0;
@@ -31,20 +31,16 @@ public class RunGame
       int level = 1;
       while(length == 0)
       {
-         System.out.print("Difficulty (0,1,2,3,c): ");
+         System.out.print("Difficulty (0,1,2,3,4,c): ");
          Scanner reader = new Scanner(System.in);
          String temp = reader.nextLine();
          if(temp.equals("c")) { level = GameBoard.CHOOSE; }
          else { level = Integer.parseInt(temp); }
-      
-         if(level >= GameBoard.EASY && level <= GameBoard.HARD) {
-            length = GameBoard.SIZE[level];
-            width = GameBoard.SIZE[level];
+
+         if(level * 2 >= GameBoard.E1 && level * 2  <= GameBoard.H) {
+            length = GameBoard.SIZE[level * 2 + 1];
+            width = GameBoard.SIZE[level * 2];
             bombs = GameBoard.BOMBS[level];
-         } else if(level == GameBoard.EXTREME) {
-            length = GameBoard.SIZE[GameBoard.EXTREME];
-            width = GameBoard.SIZE[GameBoard.HARD];
-            bombs = GameBoard.BOMBS[GameBoard.EXTREME];
          } else if(level == GameBoard.CHOOSE) {
             boolean cont = true;
             while(cont)
@@ -63,20 +59,20 @@ public class RunGame
       }
       JFrame frame = new JFrame();
       JFrame score = new JFrame();
-   
+
       frame.setSize(length  * SQUARE_SIZE, width  * SQUARE_SIZE + 22);
       frame.setTitle("Mine Sweeper");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-   
+
       score.setSize(SCORE_X, SCORE_Y);
       score.setTitle("Stats");
-   
+
       MineSweeper game = new MineSweeper(frame, length, width, bombs);
       frame.add(game);
-   
+
       ScoreBoard stats = new ScoreBoard(game);
       score.add(stats);
-   
+
       frame.setVisible(true);
       score.setVisible(true);
    }

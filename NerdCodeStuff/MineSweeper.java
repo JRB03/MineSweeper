@@ -23,10 +23,11 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    boolean win;
 
    /** if the player is selecting amode they wants to select next */
-   private boolean easy;
-   private boolean med;
-   private boolean hard;
-   private boolean ext;
+   private boolean e1;
+   private boolean e2;
+   private boolean m1;
+   private boolean m2;
+   private boolean h;
 
    /** length of board */
    private int length;
@@ -43,7 +44,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    public MineSweeper(JFrame window, int length, int width, int bombs)
    {
       wind = window;
-   
+
       over = false;
       flag = false;
       gameboard = new GameBoard(length, width, bombs);
@@ -51,7 +52,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       this.width = width;
       this.bombs = bombs;
       flags = gameboard.flag(-1,-1);
-   
+
       this.addMouseListener(this);
       window.addKeyListener(this);
    }
@@ -65,16 +66,17 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       win = false;
       flag = false;
       int lev = -1;
-      if(easy) { lev = 0; }
-      else if(med) { lev = 1; }
-      else if(hard) { lev = 2; }
-      else if(ext) { lev = 3; }
+      if(e1) { lev = GameBoard.E1; }
+      else if(e2) { lev = GameBoard.E2; }
+      else if(m1) { lev = GameBoard.M1; }
+      else if(m2) { lev = GameBoard.M2; }
+      else if(h) { lev = GameBoard.H; }
       if(lev == -1) {}
       else {
-         length = GameBoard.SIZE[lev];
          width = GameBoard.SIZE[lev];
-         bombs = GameBoard.BOMBS[lev]; }
-   
+         length = GameBoard.SIZE[lev + 1];
+         bombs = GameBoard.BOMBS[lev/2]; }
+
       gameboard = new GameBoard(length, width, bombs);
       wind.setSize(length * RunGame.SQUARE_SIZE, width * RunGame.SQUARE_SIZE + 22);
       flags = gameboard.flag(-1,-1);
@@ -112,28 +114,30 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    public void keyPressed(KeyEvent e)
    {
       int keyCode = e.getKeyCode();
-   
+
       if(keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_META)
       {
          flag = true;
       }
-      if(keyCode == KeyEvent.VK_0) { easy = true; }
-      else if(keyCode == KeyEvent.VK_1) { med = true; }
-      else if(keyCode == KeyEvent.VK_2) { hard = true; }
-      else if(keyCode == KeyEvent.VK_3) { ext = true; }
+      if(keyCode == KeyEvent.VK_0) { e1 = true; }
+      else if(keyCode == KeyEvent.VK_1) { e2 = true; }
+      else if(keyCode == KeyEvent.VK_2) { m1 = true; }
+      else if(keyCode == KeyEvent.VK_3) { m2 = true; }
+      else if(keyCode == KeyEvent.VK_4) { h = true; }
    }
    public void keyReleased(KeyEvent e)
    {
       int keyCode = e.getKeyCode();
-   
+
       if(keyCode == KeyEvent.VK_SPACE || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_META)
       {
          flag = false;
       }
-      if(keyCode == KeyEvent.VK_0) { easy = false; }
-      else if(keyCode == KeyEvent.VK_1) { med = false; }
-      else if(keyCode == KeyEvent.VK_2) { hard = false; }
-      else if(keyCode == KeyEvent.VK_3) { ext = false; }
+      if(keyCode == KeyEvent.VK_0) { e1 = false; }
+      else if(keyCode == KeyEvent.VK_1) { e2 = false; }
+      else if(keyCode == KeyEvent.VK_2) { m1 = false; }
+      else if(keyCode == KeyEvent.VK_3) { m2 = false; }
+      else if(keyCode == KeyEvent.VK_4) { h = false; }
    }
    public void keyTyped(KeyEvent e){}
 
