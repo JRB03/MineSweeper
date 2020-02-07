@@ -119,11 +119,11 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       {
          flag = true;
       }
-      if(keyCode == KeyEvent.VK_0) { e1 = true; }
-      else if(keyCode == KeyEvent.VK_1) { e2 = true; }
-      else if(keyCode == KeyEvent.VK_2) { m1 = true; }
-      else if(keyCode == KeyEvent.VK_3) { m2 = true; }
-      else if(keyCode == KeyEvent.VK_4) { h = true; }
+      if(keyCode == KeyEvent.VK_1) { e1 = true; }
+      else if(keyCode == KeyEvent.VK_2) { e2 = true; }
+      else if(keyCode == KeyEvent.VK_3) { m1 = true; }
+      else if(keyCode == KeyEvent.VK_4) { m2 = true; }
+      else if(keyCode == KeyEvent.VK_5) { h = true; }
    }
    public void keyReleased(KeyEvent e)
    {
@@ -133,11 +133,11 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       {
          flag = false;
       }
-      if(keyCode == KeyEvent.VK_0) { e1 = false; }
-      else if(keyCode == KeyEvent.VK_1) { e2 = false; }
-      else if(keyCode == KeyEvent.VK_2) { m1 = false; }
-      else if(keyCode == KeyEvent.VK_3) { m2 = false; }
-      else if(keyCode == KeyEvent.VK_4) { h = false; }
+      if(keyCode == KeyEvent.VK_1) { e1 = false; }
+      else if(keyCode == KeyEvent.VK_2) { e2 = false; }
+      else if(keyCode == KeyEvent.VK_3) { m1 = false; }
+      else if(keyCode == KeyEvent.VK_4) { m2 = false; }
+      else if(keyCode == KeyEvent.VK_5) { h = false; }
    }
    public void keyTyped(KeyEvent e){}
 

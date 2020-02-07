@@ -31,11 +31,11 @@ public class RunGame
       int level = 1;
       while(length == 0)
       {
-         System.out.print("Difficulty (0,1,2,3,4,c): ");
+         System.out.print("Difficulty (1,2,3,4,5,c): ");
          Scanner reader = new Scanner(System.in);
          String temp = reader.nextLine();
          if(temp.equals("c")) { level = GameBoard.CHOOSE; }
-         else { level = Integer.parseInt(temp); }
+         else { level = Integer.parseInt(temp) - 1; }
 
          if(level * 2 >= GameBoard.E1 && level * 2  <= GameBoard.H) {
             length = GameBoard.SIZE[level * 2 + 1];
