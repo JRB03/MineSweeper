@@ -119,7 +119,7 @@ public class ScoreBoard extends JComponent implements ActionListener
      }
 
      bombs_rem = game.flags;
-     remain = "Bombs left: " + bombs_rem;
+     remain = "Flags left: " + bombs_rem;
 
      repaint();
   }
