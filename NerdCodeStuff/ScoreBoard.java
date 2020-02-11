@@ -119,7 +119,8 @@ public class ScoreBoard extends JComponent implements ActionListener
      }
 
      bombs_rem = game.flags;
-     remain = "Flags left: " + bombs_rem;
+     if(game.win) { remain = "All bombs clear."; }
+     else { remain = "Bombs left: " + bombs_rem; }
 
      repaint();
   }
