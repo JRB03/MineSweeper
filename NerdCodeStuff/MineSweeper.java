@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Scanner;
 
 /**
 handles art and input
@@ -28,6 +29,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    private boolean m1;
    private boolean m2;
    private boolean h;
+   private boolean c;
 
    /** length of board */
    private int length;
@@ -71,7 +73,25 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       else if(m1) { lev = GameBoard.M1; }
       else if(m2) { lev = GameBoard.M2; }
       else if(h) { lev = GameBoard.H; }
-      if(lev == -1) {}
+      else if(c)
+      {
+        Scanner reader = new Scanner(System.in);
+        boolean cont = true;
+        while(cont)
+        {
+           System.out.print("Width: ");
+           length = Integer.parseInt(reader.nextLine());
+           System.out.print("Height: ");
+           width = Integer.parseInt(reader.nextLine());
+           System.out.print("Bombs: ");
+           bombs = Integer.parseInt(reader.nextLine());
+           if(!(length < 0 || length > 55 || width < 0 || width > 33 || bombs >= width * length)) {
+             System.out.println();
+             cont = false;
+           } else { System.out.println(" too large an input..."); }
+        }
+      }
+      if(lev == -1 || c) {}
       else {
          width = GameBoard.SIZE[lev];
          length = GameBoard.SIZE[lev + 1];
@@ -124,6 +144,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       else if(keyCode == KeyEvent.VK_3) { m1 = true; }
       else if(keyCode == KeyEvent.VK_4) { m2 = true; }
       else if(keyCode == KeyEvent.VK_5) { h = true; }
+      else if(keyCode == KeyEvent.VK_C) { c = true; }
    }
    public void keyReleased(KeyEvent e)
    {
@@ -138,6 +159,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       else if(keyCode == KeyEvent.VK_3) { m1 = false; }
       else if(keyCode == KeyEvent.VK_4) { m2 = false; }
       else if(keyCode == KeyEvent.VK_5) { h = false; }
+      else if(keyCode == KeyEvent.VK_C) { c = false; }
    }
    public void keyTyped(KeyEvent e){}
 
