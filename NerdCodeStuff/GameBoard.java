@@ -19,7 +19,7 @@ public class GameBoard
    public static final int CHOOSE = -1;
 
    /** bombs and sizes of board at each difficulty */
-   public static final int[] BOMBS = {10, 10, 40, 40, 99};
+   public static final int[] BOMBS = {10, 10, 40, 39, 99};
    public static final int[] SIZE = {10, 10, 8, 8, 16, 16, 13, 15, 16, 30};
 
    /** the game board */
