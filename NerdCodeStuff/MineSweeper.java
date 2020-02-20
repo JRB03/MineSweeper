@@ -23,13 +23,19 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    /** if the player has won */
    boolean win;
 
-   /** if the player is selecting amode they wants to select next */
+   /** if the player is selecting a mode they wants to select next */
    private boolean e1;
    private boolean e2;
    private boolean m1;
    private boolean m2;
    private boolean h;
    private boolean c;
+
+   /** a difficulty boost */
+   private boolean q;
+
+   /** a difficulty lessener */
+   private boolean w;
 
    /** length of board */
    private int length;
@@ -96,6 +102,8 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
          width = GameBoard.SIZE[lev];
          length = GameBoard.SIZE[lev + 1];
          bombs = GameBoard.BOMBS[lev/2]; }
+       if(q) { bombs += 5; }
+       else if(w) { bombs -= 5; }
 
       gameboard = new GameBoard(length, width, bombs);
       wind.setSize(length * RunGame.SQUARE_SIZE, width * RunGame.SQUARE_SIZE + 22);
@@ -145,6 +153,9 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       else if(keyCode == KeyEvent.VK_4) { m2 = true; }
       else if(keyCode == KeyEvent.VK_5) { h = true; }
       else if(keyCode == KeyEvent.VK_C) { c = true; }
+
+      else if(keyCode == KeyEvent.VK_Q) { q = true; }
+      else if(keyCode == KeyEvent.VK_W) { w = true; }
    }
    public void keyReleased(KeyEvent e)
    {
@@ -160,6 +171,9 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       else if(keyCode == KeyEvent.VK_4) { m2 = false; }
       else if(keyCode == KeyEvent.VK_5) { h = false; }
       else if(keyCode == KeyEvent.VK_C) { c = false; }
+
+      else if(keyCode == KeyEvent.VK_Q) { q = false; }
+      else if(keyCode == KeyEvent.VK_W) { w = false; }
    }
    public void keyTyped(KeyEvent e){}
 
