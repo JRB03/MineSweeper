@@ -37,6 +37,9 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    /** a difficulty lessener */
    private boolean w;
 
+   /** cheat */
+   private boolean gilbert;
+
    /** length of board */
    private int length;
    /** width of board */
@@ -108,6 +111,8 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       gameboard = new GameBoard(length, width, bombs);
       wind.setSize(length * RunGame.SQUARE_SIZE, width * RunGame.SQUARE_SIZE + 22);
       flags = gameboard.flag(-1,-1);
+
+      if(gilbert) { gameboard.gilbertsCheat(); }
    }
 
    /**
@@ -156,6 +161,8 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
 
       else if(keyCode == KeyEvent.VK_Q) { q = true; }
       else if(keyCode == KeyEvent.VK_W) { w = true; }
+
+      if(keyCode == KeyEvent.VK_G) { gilbert = true; }
    }
    public void keyReleased(KeyEvent e)
    {
@@ -174,6 +181,8 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
 
       else if(keyCode == KeyEvent.VK_Q) { q = false; }
       else if(keyCode == KeyEvent.VK_W) { w = false; }
+
+      if(keyCode == KeyEvent.VK_G) { gilbert = false; }
    }
    public void keyTyped(KeyEvent e){}
 

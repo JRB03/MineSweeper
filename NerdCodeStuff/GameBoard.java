@@ -241,6 +241,23 @@ public class GameBoard
       return flags;
    }
 
+   public void gilbertsCheat()
+   {
+     int stupidCounter = 0;
+     boolean gilbertIsStupid = false;
+     while(!gilbertIsStupid && stupidCounter < 512)
+     {
+       int row = (int)(Math.random() * length);
+       int col = (int)(Math.random() * width);
+
+       if (board[row][col].val == 0) {
+         flip(row, col, false);
+         gilbertIsStupid = true;
+       }
+       else {stupidCounter++;}
+     }
+   }
+
    /**
    holds the information for individual squares
    @author Jack Basinet

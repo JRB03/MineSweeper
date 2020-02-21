@@ -13,6 +13,8 @@ public class ScoreBoard extends JComponent implements ActionListener
   public static final String LOSE = "You Lose :(";
   public static final String WIN = "You Win! :)";
 
+  /** score/time in seconds */
+  private int score;
   /** the timer */
   private Timer timer;
   /** seconds, minutes, and hrs */
@@ -74,6 +76,7 @@ public class ScoreBoard extends JComponent implements ActionListener
   {
     if(!game.over && !game.win && restart)
     {
+      score = 0;
       sec = 0;
       min = 0;
       hrs = 0;
@@ -81,11 +84,12 @@ public class ScoreBoard extends JComponent implements ActionListener
     }
     else if(!game.over && !game.win && wait == 50)
     {
-     sec++;
-     hrs = (hrs + min / 60);
-     min = min % 60 + sec / 60;
-     sec = (sec % 60);
-     wait = 0;
+      score++;
+      sec++;
+      hrs = (hrs + min / 60);
+      min = min % 60 + sec / 60;
+      sec = (sec % 60);
+      wait = 0;
     }
     else if(!game.over && !game.win) { wait++; }
     else
