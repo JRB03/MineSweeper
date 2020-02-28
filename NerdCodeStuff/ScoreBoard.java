@@ -14,7 +14,7 @@ public class ScoreBoard extends JComponent implements ActionListener
   public static final String WIN = "You Win! :)";
 
   /** score/time in seconds */
-  private int score;
+  static int score;
   /** the timer */
   private Timer timer;
   /** seconds, minutes, and hrs */
