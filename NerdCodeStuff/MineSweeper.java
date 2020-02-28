@@ -54,7 +54,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    JFrame wind;
 
    /** the score writer */
-   private HighScoreReader score;
+   private HighScoreReader scoreReader;
 
    /**
    constructor
@@ -65,7 +65,7 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
      this.level = level;
 
       wind = window;
-      score = new HighScoreReader();
+      scoreReader = new HighScoreReader();
 
       over = false;
       flag = false;
@@ -112,21 +112,27 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
            } else { System.out.println(" too large an input..."); }
         }
       }
+
       if(lev == -1 || lev == -2) {}
       else {
          width = GameBoard.SIZE[lev];
          length = GameBoard.SIZE[lev + 1];
          bombs = GameBoard.BOMBS[lev/2]; }
-       if(q) { bombs += 5; }
-       else if(w) { bombs -= 5; }
 
-       String d = "";
-       if(lev == 0) { d = "E1"; }
-       else if(lev == 2) { d = "E2"; }
-       else if(lev == 4) { d = "M3"; }
-       else if(lev == 6) { d = "M4"; }
-       else if(lev == 8) { d = "H5"; }
-       else { d = "C"; }
+       if(lev == 0) { level = "E1"; }
+       else if(lev == 2) { level = "E2"; }
+       else if(lev == 4) { level = "M3"; }
+       else if(lev == 6) { level = "M4"; }
+       else if(lev == 8) { level = "H5"; }
+       else if(lev == -2) { level = "C"; }
+
+       if(q) {
+         bombs += 5;
+         level = "C";
+       } else if(w) {
+         bombs -= 5;
+         level = "C";
+       }
 
       gameboard = new GameBoard(length, width, bombs);
       wind.setSize(length * RunGame.SQUARE_SIZE, width * RunGame.SQUARE_SIZE + 22);
@@ -141,14 +147,8 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
    */
    public void mousePressed(MouseEvent e)
    {
-     try{
-      if(win)
-      {
-        String scwa = "" + ScoreBoard.score;
-        if(!level.equals("C")) { score.updateScores(scwa, level); }
-        restart();
-      }
-      else if(over) { restart(); }
+     try {
+      if(over || win) { restart(); }
       else if(flag)
       {
          flags = gameboard.flag((int)(e.getX() / RunGame.SQUARE_SIZE), (int)(e.getY() / RunGame.SQUARE_SIZE));
@@ -157,9 +157,13 @@ public class MineSweeper extends JComponent implements MouseListener, KeyListene
       {
          over = gameboard.flip((int)(e.getX() / RunGame.SQUARE_SIZE), (int)(e.getY() / RunGame.SQUARE_SIZE), false);
       }
-      if(gameboard.isWin() && !over) {
+      if(gameboard.isWin() && !over)
+      {
          gameboard.gameOver(true);
-         win = true; }
+         win = true;
+         String scwa = "" + ScoreBoard.score;
+         if(!level.equals("C")) { scoreReader.updateScores(scwa, level); }
+      }
       repaint();
     }
     catch(IOException ex){}

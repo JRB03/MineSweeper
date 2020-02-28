@@ -69,11 +69,11 @@ public class RunGame
       score.setTitle("Stats");
 
       String d = "";
-      if(level == 1) { d = "E1"; }
-      else if(level == 2) { d = "E2"; }
-      else if(level == 3) { d = "M3"; }
-      else if(level == 4) { d = "M4"; }
-      else if(level == 5) { d = "H5"; }
+      if(level == 0) { d = "E1"; }
+      else if(level == 1) { d = "E2"; }
+      else if(level == 2) { d = "M3"; }
+      else if(level == 3) { d = "M4"; }
+      else if(level == 4) { d = "H5"; }
       else { d = "C"; }
       MineSweeper game = new MineSweeper(frame, length, width, bombs, d);
       frame.add(game);

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class HighScoreReader
 {
-    public static final String FILENAME = "HighScores.txt";
+    public static final String FILENAME = "../HighScores.txt";
 
     /** the list of scores */
     private ArrayList<String> scores;
@@ -16,13 +16,13 @@ public class HighScoreReader
     reads and adds a score to the High Score doc
     @param score the score to be added in
     */
-    public ArrayList<String> readFile(String score) throws IOException
+    public void readFile(String score) throws IOException
     {
       scores = new ArrayList<>();
 
       Files.lines(Paths.get(FILENAME)).map(s -> s.trim()).filter(s -> !s.isEmpty()).forEach(n -> scores.add(n));
+
       scores.add(score);
-      return scores;
     }
 
     /**
@@ -40,6 +40,29 @@ public class HighScoreReader
    }
 
    /**
+   gets the score of a high score String
+   @param str the string to be broken down to an int
+   @param Integer the score of str
+   */
+   static Integer getIntScore(String str)
+   {
+     boolean inte = true;
+     int idx = 0;
+     String num = "";
+     while(inte)
+     {
+       if(str.charAt(idx) > 47 && str.charAt(idx) < 58)
+       {
+         num += str.charAt(idx);
+         idx++;
+       }
+       else { inte = false; }
+     }
+     Integer sco = Integer.parseInt(num);
+     return sco;
+   }
+
+   /**
    sorts the scores List
    */
    public void sortScores()
@@ -47,19 +70,7 @@ public class HighScoreReader
       ArrayList<Integer> intScores = new ArrayList<>();
       for(String s: scores)
       {
-        boolean inte = true;
-        int idx = 0;
-        String num = "";
-        while(inte)
-        {
-          if(s.charAt(idx) > 47 && s.charAt(idx) < 58)
-          {
-            num += s.charAt(idx);
-            idx++;
-          }
-          else { inte = false; }
-        }
-        Integer temp = Integer.parseInt(num);
+        Integer temp = getIntScore(s);
         intScores.add(temp);
       }
 
