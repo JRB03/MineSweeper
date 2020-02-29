@@ -21,7 +21,7 @@ public class RunGame
       String rules = yn.nextLine();
       if(rules.equals("y") || rules.equals("yes") || rules.equals("Y"))
       {
-         System.out.println("1. Click on a tile to reveal it\n2. Hold spacebar and click on a tile to flag it\n3. Each tiles value is how many bombs are adjacent to it (up to 8)\n4. Click on a shown tile whose flag value has been met to reveal the other tiles around it\n5. Flag all the bombs to win!\n6. Once you win, hold the number level (or c) you'd like to play next (none if you want to do the same) and click the screen anywhere to start again");
+         System.out.println("1. Click on a tile to reveal it\n2. Hold spacebar and click on a tile to flag it\n3. Each tiles value is how many bombs are adjacent to it (up to 8)\n4. Click on a shown tile whose flag value has been met to reveal the other tiles around it\n5. Flag all the bombs to win!\n6. Once you win, hold the number level (or 'c') you'd like to play next (none if you want to do the same) and click the screen anywhere to start again\n{to toggle the start help hit 'g'}\n{hold 'q' or 'w' when restarting to +5 or -5 bombs}");
       }
 
       boolean input = false;
