@@ -148,7 +148,7 @@ public class GameBoard
    @param c the column of the square
    @return boolean if bomb flipped
    */
-   public boolean flip(int r, int c, boolean recurs)
+   public boolean flip(int r, int c, boolean recurs, boolean bypass)
    {
       Square square = board[r][c];
       if(square.flag) {
@@ -173,21 +173,21 @@ public class GameBoard
             {
                if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width) && !board[square.row-1][square.col + a].flag) {
                   temp = board[square.row-1][square.col + a];
-                  boolean m = flip(temp.row, temp.col, true);
+                  boolean m = flip(temp.row, temp.col, true, false);
                   if(!over) { over = m; } }
             }
             for(int a = -1; a < 2; a++)
             {
                if((square.col + a >=0 && square.col + a < width) && !board[square.row][square.col + a].flag) {
                   temp = board[square.row][square.col + a];
-                  boolean m = flip(temp.row, temp.col, true);
+                  boolean m = flip(temp.row, temp.col, true, false);
                   if(!over) { over = m; } }
             }
             for(int a = -1; a < 2; a++)
             {
                if((square.row+1 < length && square.col + a >=0 && square.col + a < width) && !board[square.row+1][square.col + a].flag) {
                   temp = board[square.row+1][square.col + a];
-                  boolean m = flip(temp.row, temp.col, true);
+                  boolean m = flip(temp.row, temp.col, true, false);
                   if(!over) { over = m; } }
             }
             return over;
@@ -196,17 +196,17 @@ public class GameBoard
       if(square.show) {
          return false; }
 
-      square.show = true;
+      if(!bypass) { square.show = true; }
 
       if(square.val == 0) {
          for(int a = -1; a < 2; a++) {
-            if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width)) { flip(square.row-1, square.col + a, true); }
+            if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width)) { flip(square.row-1, square.col + a, true, false); }
          }
          for(int a = -1; a < 2; a++) {
-            if((square.col + a >=0 && square.col + a < width)) { flip(square.row, square.col + a, true); }
+            if((square.col + a >=0 && square.col + a < width)) { flip(square.row, square.col + a, true, false); }
          }
          for(int a = -1; a < 2; a++) {
-            if((square.row+1 < length && square.col + a >=0 && square.col + a < width)) { flip(square.row+1, square.col + a, true); }
+            if((square.row+1 < length && square.col + a >=0 && square.col + a < width)) { flip(square.row+1, square.col + a, true, false); }
          }
          for(int a = -1; a < 2; a++) {  }
       } else if(square.val == -1) {
@@ -251,7 +251,7 @@ public class GameBoard
        int col = (int)(Math.random() * width);
 
        if (board[row][col].val == 0) {
-         flip(row, col, false);
+         flip(row, col, false, false);
          gilbertIsStupid = true;
        }
        else {stupidCounter++;}
