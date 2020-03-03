@@ -198,7 +198,7 @@ public class GameBoard
 
       if(!bypass) { square.show = true; }
 
-      if(square.val == 0) {
+      if(!bypass && square.val == 0) {
          for(int a = -1; a < 2; a++) {
             if((square.row-1 >= 0 && square.col + a >=0 && square.col + a < width)) { flip(square.row-1, square.col + a, true, false); }
          }
@@ -209,7 +209,7 @@ public class GameBoard
             if((square.row+1 < length && square.col + a >=0 && square.col + a < width)) { flip(square.row+1, square.col + a, true, false); }
          }
          for(int a = -1; a < 2; a++) {  }
-      } else if(square.val == -1) {
+      } else if(!bypass && square.val == -1) {
          this.gameOver(false);
          return true;
       }
